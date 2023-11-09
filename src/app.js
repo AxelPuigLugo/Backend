@@ -1,59 +1,22 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 const fs = require('fs');
+const productsRouter = require('./productsRouter');
+const cartRouter = require('./cartRouter'); // Importa el router del carrito
 
-/* app.get('/products', (req, res) => {
-  fs.readFile('productos.json', { encoding: 'utf-8' }, (error, datos) => {
-    if (error) {
-      console.log(`Error: ${error}`);
-      res.status(500).send('Error interno del servidor');
-    } else {
-      res.send(datos);
-    }
-  });
-}); */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/products', (req, res) => {
-    const limit = req.query.limit; // Obtener el valor de 'limit' de los query params
-  
-    fs.readFile('productos.json', { encoding: 'utf-8' }, (error, datos) => {
-      if (error) {
-        console.log(`Error: ${error}`);
-        res.status(500).send('Error interno del servidor');
-      } else {
-        let productos = JSON.parse(datos);
-  
-        if (limit) {
-          productos = productos.slice(0, parseInt(limit)); // Aplicar el límite si se proporciona
-        }
-  
-        res.send(productos);
-      }
-    });
-  });
+app.get('/', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.status(200).send('Bienvenido a mi primera entrega');
+});
 
-  
-app.get('/products/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-  
-    fs.readFile('productos.json', { encoding: 'utf-8' }, (error, datos) => {
-      if (error) {
-        console.log(`Error: ${error}`);
-        res.status(500).send('Error interno del servidor');
-      } else {
-        const productos = JSON.parse(datos);
-        const producto = productos.find(producto => producto.id === id);
-  
-        if (producto) {
-          res.send(producto);
-        } else {
-          res.status(404).send('Producto no encontrado');
-        }
-      }
-    });
-  });
-  
+// Usa los routers en las rutas correspondientes
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartRouter);
+
 const server = app.listen(PORT, () => {
-  console.log(`Server on line en puerto: ${PORT}`);
+  console.log(`Server en línea en puerto: ${PORT}`);
 });
