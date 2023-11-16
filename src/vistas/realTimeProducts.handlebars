@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real Time Products</title>
+</head>
+<body>
+  <h1>Lista de Productos en Tiempo Real</h1>
+  <ul id="real-time-products">
+    {{#each products}}
+      <li>{{this.nombre}} - {{this.descripcion}} - {{this.precio}}</li>
+    {{/each}}
+  </ul>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/client.js"></script>
+</body>
+</html>
